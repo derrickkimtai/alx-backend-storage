@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ Log stats """
 from pymongo import MongoClient
+"""impoerts that"""
 
 METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 
@@ -14,7 +15,6 @@ def log_stats(mongo_collection):
     count = mongo_collection.count_documents(
         {"method": {"$in": METHODS}}
     )
-    print(f"{count} method")
     print(mongo_collection.count_documents(
         {"method": {"$in": METHODS}, "path": "/status"}
     ), "status check")
