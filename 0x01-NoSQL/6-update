@@ -2,6 +2,7 @@
 // the document is identified by the value of the attribute "name"
 // the new attribute is added to the document
 db.school.update(
-    {name: "Holberton school"},
-    {$set: {address: "972 Mission street"} },
+    { name: "Holberton school" },
+    { $set: {address: "972 Mission street" } },
+    { multi: true }
 )
