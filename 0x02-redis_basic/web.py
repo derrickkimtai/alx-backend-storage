@@ -9,15 +9,12 @@ r = redis.Redis()
 
 def count_calls(method):
     """"Decorator to count calls to a method"""
-    key = f"count:{method.__qualname__}"
-
     @wraps(method)
     def wrapper(url):
+        key = f"count:{url}"
         r.incr(key)
         return method(url)
-
     return wrapper
-
 
 def cache_page(method):
     """Cache the result of the method"""
