@@ -18,6 +18,7 @@ def count_calls(method: Callable) -> Callable:
 
     return wrapper
 
+
 def call_history(method: Callable) -> Callable:
     """Decorator to store the history of inputs"""
     key = method.__qualname__
@@ -32,13 +33,15 @@ def call_history(method: Callable) -> Callable:
 
     return wrapper
 
+
 def replay(method: Callable) -> None:
     """Display the history of calls of a method"""
     r = redis.Redis()
     method_name = method.__qualname__
     inputs = r.lrange(f"{method_name}:inputs", 0, -1)
     outputs = r.lrange(f"{method_name}:outputs", 0, -1)
-    print(f"{method_name} was called {r.get(method_name).decode('utf-8')} times:")
+    print(f"{method_name} was called "
+          f"{r.get(method_name).decode('utf-8')} times:")
     for i, o in zip(inputs, outputs):
         print(f"{method_name}(*{i.decode('utf-8')}) -> {o.decode('utf-8')}")
 
@@ -57,18 +60,19 @@ class Cache:
         key = str(uuid4())
         self._redis.set(key, data)
         return key
-    
-    def get(self, key: str, fn: callable = None) -> Union[str, bytes, int, float]:
+
+    def get(self, key: str,
+            fn: callable = None) -> Union[str, bytes, int, float]:
         """Get data from redis"""
         data = self._redis.get(key)
         if fn:
             return fn(data)
         return data if data else None
-    
+
     def get_str(self, key: str) -> str:
         """Get string data from redis"""
         return self.get(key, fn=lambda d: d.decode("utf-8"))
-    
+
     def get_int(self, key: str) -> int:
         """Get int data from redis"""
         return self.get(key, fn=int)
