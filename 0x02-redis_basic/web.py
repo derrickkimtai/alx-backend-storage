@@ -2,36 +2,24 @@
 """redis exercise"""
 import requests
 from functools import wraps
+from typing import Callable
 import redis
+
 
 r = redis.Redis()
 
 
-def count_calls(method):
-    """"Decorator to count calls to a method"""
+def count_requests(method: Callable) -> Callable:
+    """Decorator to count requests"""
     @wraps(method)
     def wrapper(url):
-        key = f"count:{url}"
-        r.incr(key)
+        """Wrapper function"""
+        r.incr(f"count:{url}")
         return method(url)
     return wrapper
 
-def cache_page(method):
-    """Cache the result of the method"""
-    @wraps(method)
-    def wrapper(url):
-        result = r.get(url)
-        if result:
-            return result.decode('utf-8')
-        result = method(url)
-        r.setex(url, 10, result)
-        return result
 
-    return wrapper
-
-
-@count_calls
-@cache_page
+@count_requests
 def get_page(url: str) -> str:
     """Get the content of a web page"""
     return requests.get(url).text
