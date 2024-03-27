@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """redis exercise"""
-
 import redis
 from uuid import uuid4
 from typing import Union
