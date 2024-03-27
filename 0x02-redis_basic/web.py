@@ -6,7 +6,9 @@ import redis
 
 r = redis.Redis()
 
+
 def count_calls(method):
+    """"Decorator to count calls to a method"""
     key = f"count:{method.__qualname__}"
 
     @wraps(method)
@@ -16,7 +18,9 @@ def count_calls(method):
 
     return wrapper
 
+
 def cache_page(method):
+    """Cache the result of the method"""
     @wraps(method)
     def wrapper(url):
         result = r.get(url)
@@ -28,7 +32,9 @@ def cache_page(method):
 
     return wrapper
 
+
 @count_calls
 @cache_page
 def get_page(url: str) -> str:
+    """Get the content of a web page"""
     return requests.get(url).text
