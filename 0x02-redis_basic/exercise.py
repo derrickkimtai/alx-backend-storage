@@ -5,6 +5,7 @@ from uuid import uuid4
 from typing import Union, Callable
 from functools import wraps
 
+
 def count_calls(method: Callable) -> Callable:
     """Decorator to count calls to a method"""
     key = method.__qualname__
@@ -40,6 +41,7 @@ def replay(method: Callable) -> None:
     print(f"{method_name} was called {r.get(method_name).decode('utf-8')} times:")
     for i, o in zip(inputs, outputs):
         print(f"{method_name}(*{i.decode('utf-8')}) -> {o.decode('utf-8')}")
+
 
 class Cache:
     """Cache class"""
